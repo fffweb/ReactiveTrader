@@ -19,6 +19,7 @@ namespace Adaptive.ReactiveTrader.Client.Domain.ServiceClients
             _log = loggerFactory.Create(typeof (PricingServiceClient));
         }
 
+        //HACK public IObservable<PriceDto> GetSpotStream(string currencyPair) 
         public IObservable<PriceDto> GetSpotStream(string currencyPair)
         {
             if (string.IsNullOrEmpty(currencyPair)) throw new ArgumentException("currencyPair");
@@ -30,6 +31,7 @@ namespace Adaptive.ReactiveTrader.Client.Domain.ServiceClients
         {
             return Observable.Create<PriceDto>(observer =>
             {
+                //HACK convert singalr to rx, pricingHubProxy.On<PriceDto>
                 // subscribe to price feed first, otherwise there is a race condition 
                 var priceSubscription = pricingHubProxy.On<PriceDto>(ServiceConstants.Client.OnNewPrice, p =>
                 {

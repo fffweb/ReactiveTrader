@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adaptive.ReactiveTrader.Server.Domain", "Adaptive.ReactiveTrader.Server.Domain\Adaptive.ReactiveTrader.Server.Domain.csproj", "{1348ACC4-D5B2-4328-9C80-7EC813E82CE4}"
 EndProject
@@ -44,6 +44,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1CE726
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClient", "ConsoleClient\ConsoleClient.csproj", "{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -169,6 +171,22 @@ Global
 		{A894C01A-D326-40DF-BABC-0F807EB63A21}.Release|ARM.ActiveCfg = Release|Any CPU
 		{A894C01A-D326-40DF-BABC-0F807EB63A21}.Release|x64.ActiveCfg = Release|Any CPU
 		{A894C01A-D326-40DF-BABC-0F807EB63A21}.Release|x86.ActiveCfg = Release|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Debug|ARM.Build.0 = Debug|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Debug|x64.Build.0 = Debug|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Debug|x86.Build.0 = Debug|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Release|ARM.Build.0 = Release|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Release|x64.ActiveCfg = Release|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Release|x64.Build.0 = Release|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Release|x86.ActiveCfg = Release|Any CPU
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,5 +201,6 @@ Global
 		{4DB3B5AF-9F24-46D5-80D4-44787469408A} = {B0546294-6BC1-4EE3-BA00-BCA76D452648}
 		{C455AFE6-1877-44DE-89BB-7BEC9D8EE65F} = {4DB3B5AF-9F24-46D5-80D4-44787469408A}
 		{A894C01A-D326-40DF-BABC-0F807EB63A21} = {B0546294-6BC1-4EE3-BA00-BCA76D452648}
+		{1C4BC1FE-DCA8-4390-8D48-ACF3945EBB9B} = {B0546294-6BC1-4EE3-BA00-BCA76D452648}
 	EndGlobalSection
 EndGlobal

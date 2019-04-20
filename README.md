@@ -17,6 +17,10 @@ Reactive Trader is a client-server application demonstrating some of the problem
 
 Reactive Trader was written by the team at [Adaptive](http://weareadaptive.com), a consultancy that specialises in building real time trading systems. We have many years of experience in building trading systems for clients with highly demanding latency and reliability requirements. Over the years we have learnt quite a few lessons, and wanted to talk about and point to examples of how we solve technical problems related to real time delivery of messages.
 
+# ***** worked sample
+	"Adaptive.ReactiveTrader.Client.MainWindow"
+	Adaptive.ReactiveTrader.Server
+	web  contains server and react ts client
 # Demos
 
 Reactive Trader comes in different flavours (click on the link for a demo)
