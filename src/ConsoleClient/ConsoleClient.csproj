@@ -86,6 +86,10 @@
       <Project>{b6c8fd41-866d-4992-bb11-ad6984c25564}</Project>
       <Name>Adaptive.ReactiveTrader.Client.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Adaptive.ReactiveTrader.Server.Domain\Adaptive.ReactiveTrader.Server.Domain.csproj">
+      <Project>{1348ACC4-D5B2-4328-9C80-7EC813E82CE4}</Project>
+      <Name>Adaptive.ReactiveTrader.Server.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Adaptive.ReactiveTrader.Shared\Adaptive.ReactiveTrader.Shared.csproj">
       <Project>{B954B5A9-ABD0-469B-9397-039675BEC8F0}</Project>
       <Name>Adaptive.ReactiveTrader.Shared</Name>

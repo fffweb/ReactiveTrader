@@ -15,6 +15,7 @@ using System.Reactive;
 using Adaptive.ReactiveTrader.Client.Domain.Transport;
 using Adaptive.ReactiveTrader.Shared.Extensions;
 using System.Threading;
+using Adaptive.ReactiveTrader.Server.ReferenceData;
 
 namespace ConsoleClient
 {
@@ -22,11 +23,70 @@ namespace ConsoleClient
     {
         static void Main(string[] args)
         {
-            init();
+            conifg();
+            Initialize().Subscribe(
+                _ =>
+                {
+                    //connected sucessfully
+                    var a = GetSpotStreamForConnection("USDJPY", PricingHubProxy).Subscribe(p =>
+                        Console.WriteLine("ask:{0} bid:{1} CreationTimestamp {2} Mid {3},SpotDate {4},ValueDate {5},Symbol {6}", p.Ask, p.Bid, p.CreationTimestamp, p.Mid, p.SpotDate, p.ValueDate, p.Symbol)
+                       );
+                },
+                ex =>
+                {
+
+                },
+                () => //TODO: what's difference between () =>  and _ =>
+                {
+
+                });
             Console.ReadKey();
         }
+        public static IObservable<Unit> Initialize()
+        {
+            if (_initialized)
+            {
+                throw new InvalidOperationException("Connection has already been initialized");
+            }
+            _initialized = true;
 
-        static async void init()
+            return Observable.Create<Unit>(async observer =>
+            {
+                //_statusStream.OnNext(new ConnectionInfo(ConnectionStatus.Connecting, Address, TransportName));
+
+                try
+                {
+                    //Console.WriteLine("Connecting to {0} via {1}", Address, TransportName);
+                    await _hubConnection.Start();
+                    //_statusStream.OnNext(new ConnectionInfo(ConnectionStatus.Connected, Address, TransportName));
+                    observer.OnNext(Unit.Default);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("An error occurred when starting SignalR connection", e);
+                    observer.OnError(e);
+                }
+
+                return Disposable.Create(() =>
+                {
+                    try
+                    {
+                        Console.WriteLine("Stoping connection...");
+                        _hubConnection.Stop();
+                        Console.WriteLine("Connection stopped");
+                    }
+                    catch (Exception e)
+                    {
+                        // we must never throw in a disposable
+                        Console.WriteLine("An error occurred while stoping connection", e);
+                    }
+                });
+            })
+            .Publish()
+            .RefCount();
+        }
+
+        static void conifg()
         {
             //var _loggerFactory =  new DebugLoggerFactory();
             //var _log = _loggerFactory.Create(typeof(ReactiveTrader));
@@ -41,7 +101,7 @@ namespace ConsoleClient
                                                            // ReactiveTrader Server gui singalr version is 1.2, while client version is 2.0
                                                            //"You are using a version of the client that isn't compatible with the server. Client version 2.1, server version 1.3."
 
-            var _hubConnection = new HubConnection(address);
+            _hubConnection = new HubConnection(address);
             _hubConnection.Headers.Add(ServiceConstants.Server.UsernameHeader, username);
 
             //CreateStatus(_hubConnection).Subscribe(
@@ -51,25 +111,27 @@ namespace ConsoleClient
             _hubConnection.Error += exception => Console.WriteLine("There was a connection error with " + address, exception);
 
             
-            var PricingHubProxy = _hubConnection.CreateHubProxy(proxy);
-            try
-            {
-                //_log.InfoFormat("Connecting to {0} via {1}", Address, TransportName);
-                await _hubConnection.Start();
-                //_statusStream.OnNext(new ConnectionInfo(ConnectionStatus.Connected, Address, TransportName));
-                //observer.OnNext(Unit.Default);
+            PricingHubProxy = _hubConnection.CreateHubProxy(proxy);
+            //try
+            //{
+            //    //Console.WriteLine("Connecting to {0} via {1}", Address, TransportName);
+            //    await _hubConnection.Start();
+            //    //_statusStream.OnNext(new ConnectionInfo(ConnectionStatus.Connected, Address, TransportName));
+            //    //observer.OnNext(Unit.Default);
 
-            }
-            catch (Exception e)
-            {
-                //_log.Error("An error occurred when starting SignalR connection", e);
-                //observer.OnError(e);
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    //Console.WriteLine("An error occurred when starting SignalR connection", e);
+            //    //observer.OnError(e);
+            //}
 
-            Thread.Sleep(2000);
+            //Thread.Sleep(2000);
 
-            var a = GetSpotStreamForConnection("USDJPY", PricingHubProxy).Subscribe(p => Console.WriteLine(p));
+
+
         }
+
         private static IObservable<PriceDto> GetSpotStreamForConnection(string currencyPair, IHubProxy pricingHubProxy)
         {
             return Observable.Create<PriceDto>(observer =>
@@ -85,7 +147,7 @@ namespace ConsoleClient
                 });
 
                 // send a subscription request
-                //_log.InfoFormat("Sending price subscription for currency pair {0}", currencyPair);
+                //Console.WriteLine("Sending price subscription for currency pair {0}", currencyPair);
                 var subscription = SendSubscription(currencyPair, pricingHubProxy)
                     .Subscribe(
                         _ => Console.WriteLine("Subscribed to {0}", currencyPair),
@@ -95,7 +157,7 @@ namespace ConsoleClient
                 var unsubscriptionDisposable = Disposable.Create(() =>
                 {
                     // send unsubscription when the observable gets disposed
-                    //_log.InfoFormat("Sending price unsubscription for currency pair {0}", currencyPair);
+                    //Console.WriteLine("Sending price unsubscription for currency pair {0}", currencyPair);
                     SendUnsubscription(currencyPair, pricingHubProxy)
                         .Subscribe(
                             _ => Console.WriteLine("Unsubscribed from {0}", currencyPair),
@@ -132,5 +194,10 @@ namespace ConsoleClient
             return Observable.Merge(closed, connectionSlow, reconnected, reconnecting)
                 .TakeUntilInclusive(status => status == ConnectionStatus.Closed); // complete when the connection is closed (it's terminal, SignalR will not attempt to reconnect anymore)
         }
+
+        private static ICurrencyPairRepository a = new CurrencyPairRepository();
+        private static HubConnection _hubConnection;
+        public static IHubProxy PricingHubProxy;
+        private static bool _initialized = false;
     }
 }
