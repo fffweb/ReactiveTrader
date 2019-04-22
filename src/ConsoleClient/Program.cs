@@ -28,9 +28,11 @@ namespace ConsoleClient
                 _ =>
                 {
                     //connected sucessfully
-                    var a = GetSpotStreamForConnection("USDJPY", PricingHubProxy).Subscribe(p =>
+                    var a = GetSpotStreamForConnection("USDJPY").Subscribe(p =>
                         Console.WriteLine("ask:{0} bid:{1} CreationTimestamp {2} Mid {3},SpotDate {4},ValueDate {5},Symbol {6}", p.Ask, p.Bid, p.CreationTimestamp, p.Mid, p.SpotDate, p.ValueDate, p.Symbol)
                        );
+                    //TODO should return disposible
+                    //return a;
                 },
                 ex =>
                 {
@@ -42,49 +44,7 @@ namespace ConsoleClient
                 });
             Console.ReadKey();
         }
-        public static IObservable<Unit> Initialize()
-        {
-            if (_initialized)
-            {
-                throw new InvalidOperationException("Connection has already been initialized");
-            }
-            _initialized = true;
-
-            return Observable.Create<Unit>(async observer =>
-            {
-                //_statusStream.OnNext(new ConnectionInfo(ConnectionStatus.Connecting, Address, TransportName));
-
-                try
-                {
-                    //Console.WriteLine("Connecting to {0} via {1}", Address, TransportName);
-                    await _hubConnection.Start();
-                    //_statusStream.OnNext(new ConnectionInfo(ConnectionStatus.Connected, Address, TransportName));
-                    observer.OnNext(Unit.Default);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("An error occurred when starting SignalR connection", e);
-                    observer.OnError(e);
-                }
-
-                return Disposable.Create(() =>
-                {
-                    try
-                    {
-                        Console.WriteLine("Stoping connection...");
-                        _hubConnection.Stop();
-                        Console.WriteLine("Connection stopped");
-                    }
-                    catch (Exception e)
-                    {
-                        // we must never throw in a disposable
-                        Console.WriteLine("An error occurred while stoping connection", e);
-                    }
-                });
-            })
-            .Publish()
-            .RefCount();
-        }
+        
 
         static void conifg()
         {
@@ -132,13 +92,56 @@ namespace ConsoleClient
 
         }
 
-        private static IObservable<PriceDto> GetSpotStreamForConnection(string currencyPair, IHubProxy pricingHubProxy)
+        public static IObservable<Unit> Initialize()
+        {
+            if (_initialized)
+            {
+                throw new InvalidOperationException("Connection has already been initialized");
+            }
+            _initialized = true;
+
+            return Observable.Create<Unit>(async observer =>
+            {
+                //_statusStream.OnNext(new ConnectionInfo(ConnectionStatus.Connecting, Address, TransportName));
+
+                try
+                {
+                    //Console.WriteLine("Connecting to {0} via {1}", Address, TransportName);
+                    await _hubConnection.Start();
+                    //_statusStream.OnNext(new ConnectionInfo(ConnectionStatus.Connected, Address, TransportName));
+                    observer.OnNext(Unit.Default);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("An error occurred when starting SignalR connection", e);
+                    observer.OnError(e);
+                }
+
+                return Disposable.Create(() =>
+                {
+                    try
+                    {
+                        Console.WriteLine("Stoping connection...");
+                        _hubConnection.Stop();
+                        Console.WriteLine("Connection stopped");
+                    }
+                    catch (Exception e)
+                    {
+                        // we must never throw in a disposable
+                        Console.WriteLine("An error occurred while stoping connection", e);
+                    }
+                });
+            })
+            .Publish()
+            .RefCount();
+        }
+        private static IObservable<PriceDto> GetSpotStreamForConnection(string currencyPair)
         {
             return Observable.Create<PriceDto>(observer =>
             {
                 //HACK convert singalr to rx, pricingHubProxy.On<PriceDto>
                 // subscribe to price feed first, otherwise there is a race condition 
-                var priceSubscription = pricingHubProxy.On<PriceDto>(ServiceConstants.Client.OnNewPrice, p =>
+                var priceSubscription = PricingHubProxy.On<PriceDto>(ServiceConstants.Client.OnNewPrice, p =>
                 {
                     if (p.Symbol == currencyPair)
                     {
@@ -148,7 +151,7 @@ namespace ConsoleClient
 
                 // send a subscription request
                 //Console.WriteLine("Sending price subscription for currency pair {0}", currencyPair);
-                var subscription = SendSubscription(currencyPair, pricingHubProxy)
+                var subscription = SendSubscription(currencyPair, PricingHubProxy)
                     .Subscribe(
                         _ => Console.WriteLine("Subscribed to {0}", currencyPair),
                         observer.OnError);
@@ -158,7 +161,7 @@ namespace ConsoleClient
                 {
                     // send unsubscription when the observable gets disposed
                     //Console.WriteLine("Sending price unsubscription for currency pair {0}", currencyPair);
-                    SendUnsubscription(currencyPair, pricingHubProxy)
+                    SendUnsubscription(currencyPair, PricingHubProxy)
                         .Subscribe(
                             _ => Console.WriteLine("Unsubscribed from {0}", currencyPair),
                             ex =>
@@ -170,7 +173,6 @@ namespace ConsoleClient
             .Publish()
             .RefCount();
         }
-
         private static IObservable<Unit> SendSubscription(string currencyPair, IHubProxy pricingHubProxy)
         {
             return Observable.FromAsync(
