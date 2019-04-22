@@ -19,16 +19,15 @@ using Adaptive.ReactiveTrader.Server.ReferenceData;
 
 namespace ConsoleClient
 {
-    class Program
+    class Test
     {
-        static void Main(string[] args)
+        public Test()
         {
-            conifg();
-            Initialize().Subscribe(
+            Program.Initialize().Subscribe(
                 _ =>
                 {
                     //connected sucessfully
-                    var a = GetSpotStreamForConnection("USDJPY").Subscribe(p =>
+                    var a = Program.GetSpotStreamForConnection("USDJPY").Subscribe(p =>
                         Console.WriteLine("ask:{0} bid:{1} CreationTimestamp {2} Mid {3},SpotDate {4},ValueDate {5},Symbol {6}", p.Ask, p.Bid, p.CreationTimestamp, p.Mid, p.SpotDate, p.ValueDate, p.Symbol)
                        );
                     //TODO should return disposible
@@ -40,8 +39,17 @@ namespace ConsoleClient
                 },
                 () => //TODO: what's difference between () =>  and _ =>
                 {
-
+                    Console.WriteLine("connection commpleted");
                 });
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            conifg();
+            var t = new Test();
+            
             Console.ReadKey();
         }
         
@@ -135,7 +143,7 @@ namespace ConsoleClient
             .Publish()
             .RefCount();
         }
-        private static IObservable<PriceDto> GetSpotStreamForConnection(string currencyPair)
+        public static IObservable<PriceDto> GetSpotStreamForConnection(string currencyPair)
         {
             return Observable.Create<PriceDto>(observer =>
             {
