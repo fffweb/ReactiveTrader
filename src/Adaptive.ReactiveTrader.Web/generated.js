@@ -1,8 +1,16 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _this = this;
 $(document).ready(function () {
     // 15 minutes session, we disconnect users so they don't eat up too many websocket connections on Azure for too long
@@ -27,12 +35,12 @@ $(document).ready(function () {
     };
     ko.applyBindings(shellViewModel);
 });
-var CurrencyPairDto = (function () {
+var CurrencyPairDto = /** @class */ (function () {
     function CurrencyPairDto() {
     }
     return CurrencyPairDto;
 }());
-var CurrencyPairUpdateDto = (function () {
+var CurrencyPairUpdateDto = /** @class */ (function () {
     function CurrencyPairUpdateDto() {
     }
     return CurrencyPairUpdateDto;
@@ -42,22 +50,22 @@ var DirectionDto;
     DirectionDto[DirectionDto["Buy"] = 0] = "Buy";
     DirectionDto[DirectionDto["Sell"] = 1] = "Sell";
 })(DirectionDto || (DirectionDto = {}));
-var PriceDto = (function () {
+var PriceDto = /** @class */ (function () {
     function PriceDto() {
     }
     return PriceDto;
 }());
-var PriceSubscriptionRequestDto = (function () {
+var PriceSubscriptionRequestDto = /** @class */ (function () {
     function PriceSubscriptionRequestDto() {
     }
     return PriceSubscriptionRequestDto;
 }());
-var TradeDto = (function () {
+var TradeDto = /** @class */ (function () {
     function TradeDto() {
     }
     return TradeDto;
 }());
-var TradeRequestDto = (function () {
+var TradeRequestDto = /** @class */ (function () {
     function TradeRequestDto() {
     }
     return TradeRequestDto;
@@ -72,7 +80,7 @@ var UpdateTypeDto;
     UpdateTypeDto[UpdateTypeDto["Added"] = 0] = "Added";
     UpdateTypeDto[UpdateTypeDto["Removed"] = 1] = "Removed";
 })(UpdateTypeDto || (UpdateTypeDto = {}));
-var DateUtils = (function () {
+var DateUtils = /** @class */ (function () {
     function DateUtils() {
     }
     DateUtils.formatDateDayMonth = function (date) {
@@ -90,7 +98,7 @@ var DateUtils = (function () {
     };
     return DateUtils;
 }());
-var NumberFormatter = (function () {
+var NumberFormatter = /** @class */ (function () {
     function NumberFormatter() {
     }
     NumberFormatter.format = function (value) {
@@ -178,14 +186,14 @@ Rx.Observable.prototype.detectStale = function (stalenessPeriodMs, scheduler) {
         return new Rx.CompositeDisposable(sourceSubscription, timerSubscription);
     });
 };
-var Stale = (function () {
+var Stale = /** @class */ (function () {
     function Stale(stale, update) {
         this.isStale = stale;
         this.update = update;
     }
     return Stale;
 }());
-var Statistics = (function () {
+var Statistics = /** @class */ (function () {
     function Statistics(uiLatency, receivedCount, renderedCount) {
         this.receivedCount = receivedCount;
         this.uiLatencyMax = uiLatency;
@@ -193,7 +201,7 @@ var Statistics = (function () {
     }
     return Statistics;
 }());
-var PriceLatencyRecorder = (function () {
+var PriceLatencyRecorder = /** @class */ (function () {
     function PriceLatencyRecorder() {
     }
     PriceLatencyRecorder.prototype.onRendered = function (price) {
@@ -224,7 +232,7 @@ var PriceLatencyRecorder = (function () {
     };
     return PriceLatencyRecorder;
 }());
-var Profiler = (function () {
+var Profiler = /** @class */ (function () {
     function Profiler() {
         this._userPerformanceApi = typeof window.performance != "undefined";
     }
@@ -243,7 +251,7 @@ var Direction;
     Direction[Direction["Buy"] = 0] = "Buy";
     Direction[Direction["Sell"] = 1] = "Sell";
 })(Direction || (Direction = {}));
-var Trade = (function () {
+var Trade = /** @class */ (function () {
     function Trade(currencyPair, direction, notional, spotRate, tradeStatus, tradeDate, tradeId, traderName, valueDate, dealtCurrency) {
         this.currencyPair = currencyPair;
         this.direction = direction;
@@ -258,7 +266,7 @@ var Trade = (function () {
     }
     return Trade;
 }());
-var TradeFactory = (function () {
+var TradeFactory = /** @class */ (function () {
     function TradeFactory() {
     }
     TradeFactory.prototype.create = function (trade) {
@@ -271,7 +279,7 @@ var TradeStatus;
     TradeStatus[TradeStatus["Done"] = 0] = "Done";
     TradeStatus[TradeStatus["Rejected"] = 1] = "Rejected";
 })(TradeStatus || (TradeStatus = {}));
-var ExecutablePrice = (function () {
+var ExecutablePrice = /** @class */ (function () {
     function ExecutablePrice(direction, rate, executionRepository) {
         this._executionRepository = executionRepository;
         this.direction = direction;
@@ -282,7 +290,7 @@ var ExecutablePrice = (function () {
     };
     return ExecutablePrice;
 }());
-var Price = (function () {
+var Price = /** @class */ (function () {
     function Price(bid, ask, valueDate, currencyPair, profiler) {
         this.bid = bid;
         this.ask = ask;
@@ -316,7 +324,7 @@ var Price = (function () {
     };
     return Price;
 }());
-var PriceFactory = (function () {
+var PriceFactory = /** @class */ (function () {
     function PriceFactory(executionRepository, priceLatencyRecored, profiler) {
         this._executionRepository = executionRepository;
         this._priceLatencyRecored = priceLatencyRecored;
@@ -332,14 +340,14 @@ var PriceFactory = (function () {
     };
     return PriceFactory;
 }());
-var StalePrice = (function () {
+var StalePrice = /** @class */ (function () {
     function StalePrice(currencyPair) {
         this.currencyPair = currencyPair;
         this.isStale = true;
     }
     return StalePrice;
 }());
-var CurrencyPair = (function () {
+var CurrencyPair = /** @class */ (function () {
     function CurrencyPair(symbol, ratePrecision, pipsPosition, priceRespository) {
         var _this = this;
         this.symbol = symbol;
@@ -354,7 +362,7 @@ var CurrencyPair = (function () {
     }
     return CurrencyPair;
 }());
-var CurrencyPairUpdate = (function () {
+var CurrencyPairUpdate = /** @class */ (function () {
     function CurrencyPairUpdate(updateType, currencyPair) {
         this._currencyPair = currencyPair;
         this._updateType = updateType;
@@ -375,7 +383,7 @@ var CurrencyPairUpdate = (function () {
     });
     return CurrencyPairUpdate;
 }());
-var CurrencyPairUpdateFactory = (function () {
+var CurrencyPairUpdateFactory = /** @class */ (function () {
     function CurrencyPairUpdateFactory(priceRepository) {
         this._priceRepository = priceRepository;
     }
@@ -391,7 +399,7 @@ var UpdateType;
     UpdateType[UpdateType["Add"] = 0] = "Add";
     UpdateType[UpdateType["Remove"] = 1] = "Remove";
 })(UpdateType || (UpdateType = {}));
-var ExecutionRepository = (function () {
+var ExecutionRepository = /** @class */ (function () {
     function ExecutionRepository(executionServiceClient, tradeFactory) {
         this._tradeFactory = tradeFactory;
         this._executionServiceClient = executionServiceClient;
@@ -412,7 +420,7 @@ var ExecutionRepository = (function () {
     };
     return ExecutionRepository;
 }());
-var PriceRepository = (function () {
+var PriceRepository = /** @class */ (function () {
     function PriceRepository(pricingServiceClient, priceFactory) {
         this._priceFactory = priceFactory;
         this._pricingServiceClient = pricingServiceClient;
@@ -426,6 +434,7 @@ var PriceRepository = (function () {
             // if the stream errors (server disconnected), we push a stale price 
             return Rx.Observable
                 .return(new StalePrice(currencyPair))
+                // terminate the observable in 3sec so the repeat does not kick-off immediatly
                 .concat(Rx.Observable.timer(3000, Rx.Scheduler.timeout).ignoreElements().select(function (_) { return new StalePrice(currencyPair); }));
         })
             .repeat()
@@ -436,7 +445,7 @@ var PriceRepository = (function () {
     };
     return PriceRepository;
 }());
-var ReferenceDataRepository = (function () {
+var ReferenceDataRepository = /** @class */ (function () {
     function ReferenceDataRepository(referenceDataServiceClient, currencyPairUpdateFactory) {
         this._currencyPairUpdateFactory = currencyPairUpdateFactory;
         this._referenceDataServiceClient = referenceDataServiceClient;
@@ -460,7 +469,7 @@ var ReferenceDataRepository = (function () {
     };
     return ReferenceDataRepository;
 }());
-var TradeRepository = (function () {
+var TradeRepository = /** @class */ (function () {
     function TradeRepository(blotterServiceClient, tradeFactory) {
         this._tradeFactory = tradeFactory;
         this._blotterServiceClient = blotterServiceClient;
@@ -483,7 +492,7 @@ var TradeRepository = (function () {
     };
     return TradeRepository;
 }());
-var ServiceClientBase = (function () {
+var ServiceClientBase = /** @class */ (function () {
     function ServiceClientBase(connectionProvider) {
         this._connectionProvider = connectionProvider;
     }
@@ -525,10 +534,10 @@ var ServiceClientBase = (function () {
     };
     return ServiceClientBase;
 }());
-var BlotterServiceClient = (function (_super) {
+var BlotterServiceClient = /** @class */ (function (_super) {
     __extends(BlotterServiceClient, _super);
     function BlotterServiceClient(connectionProvider) {
-        _super.call(this, connectionProvider);
+        return _super.call(this, connectionProvider) || this;
     }
     BlotterServiceClient.prototype.getTradesStream = function () {
         var _this = this;
@@ -554,10 +563,10 @@ var BlotterServiceClient = (function (_super) {
     };
     return BlotterServiceClient;
 }(ServiceClientBase));
-var ExecutionServiceClient = (function (_super) {
+var ExecutionServiceClient = /** @class */ (function (_super) {
     __extends(ExecutionServiceClient, _super);
     function ExecutionServiceClient(connectionProvider) {
-        _super.call(this, connectionProvider);
+        return _super.call(this, connectionProvider) || this;
     }
     ExecutionServiceClient.prototype.executeRequest = function (tradeRequest) {
         var _this = this;
@@ -573,10 +582,10 @@ var ExecutionServiceClient = (function (_super) {
     };
     return ExecutionServiceClient;
 }(ServiceClientBase));
-var PricingServiceClient = (function (_super) {
+var PricingServiceClient = /** @class */ (function (_super) {
     __extends(PricingServiceClient, _super);
     function PricingServiceClient(connectionProvider) {
-        _super.call(this, connectionProvider);
+        return _super.call(this, connectionProvider) || this;
     }
     PricingServiceClient.prototype.getSpotStream = function (currencyPair) {
         var _this = this;
@@ -609,10 +618,10 @@ var PricingServiceClient = (function (_super) {
     };
     return PricingServiceClient;
 }(ServiceClientBase));
-var ReferenceDataServiceClient = (function (_super) {
+var ReferenceDataServiceClient = /** @class */ (function (_super) {
     __extends(ReferenceDataServiceClient, _super);
     function ReferenceDataServiceClient(connectionProvider) {
-        _super.call(this, connectionProvider);
+        return _super.call(this, connectionProvider) || this;
     }
     ReferenceDataServiceClient.prototype.getCurrencyPairUpdatesStream = function () {
         var _this = this;
@@ -639,14 +648,14 @@ var ReferenceDataServiceClient = (function (_super) {
     };
     return ReferenceDataServiceClient;
 }(ServiceClientBase));
-var TransportDisconnectedException = (function () {
+var TransportDisconnectedException = /** @class */ (function () {
     function TransportDisconnectedException(message) {
         this.message = message;
         this.name = "TransportDisconnectedException";
     }
     return TransportDisconnectedException;
 }());
-var SessionExpirationService = (function () {
+var SessionExpirationService = /** @class */ (function () {
     function SessionExpirationService(sessionDurationSeconds) {
         this._sessionDurationSeconds = sessionDurationSeconds;
     }
@@ -657,7 +666,7 @@ var SessionExpirationService = (function () {
     };
     return SessionExpirationService;
 }());
-var Connection = (function () {
+var Connection = /** @class */ (function () {
     function Connection(address, username) {
         var _this = this;
         this._status = new Rx.BehaviorSubject(new ConnectionInfo(ConnectionStatus.Uninitialized, address, ConnectionType.None));
@@ -799,7 +808,7 @@ var Connection = (function () {
     };
     return Connection;
 }());
-var ConnectionInfo = (function () {
+var ConnectionInfo = /** @class */ (function () {
     function ConnectionInfo(connectionStatus, server, connectionType) {
         this.connectionStatus = connectionStatus;
         this.server = server;
@@ -810,7 +819,7 @@ var ConnectionInfo = (function () {
     };
     return ConnectionInfo;
 }());
-var ConnectionProvider = (function () {
+var ConnectionProvider = /** @class */ (function () {
     function ConnectionProvider(username, servers) {
         this._disposable = new Rx.SingleAssignmentDisposable();
         this._username = username;
@@ -879,7 +888,7 @@ var ConnectionType;
     ConnectionType[ConnectionType["LongPolling"] = 3] = "LongPolling";
     ConnectionType[ConnectionType["None"] = 4] = "None";
 })(ConnectionType || (ConnectionType = {}));
-var BlotterViewModel = (function () {
+var BlotterViewModel = /** @class */ (function () {
     function BlotterViewModel(tradeRepository) {
         this._tradeRepository = tradeRepository;
         this.trades = ko.observableArray([]);
@@ -912,7 +921,7 @@ var BlotterViewModel = (function () {
     };
     return BlotterViewModel;
 }());
-var TradeViewModel = (function () {
+var TradeViewModel = /** @class */ (function () {
     function TradeViewModel(trade) {
         this.spotRate = trade.spotRate;
         this.notional = NumberFormatter.format(trade.notional) + " " + trade.dealtCurrency;
@@ -927,7 +936,7 @@ var TradeViewModel = (function () {
     }
     return TradeViewModel;
 }());
-var ConnectivityStatusViewModel = (function () {
+var ConnectivityStatusViewModel = /** @class */ (function () {
     function ConnectivityStatusViewModel(reactiveTrader, priceLatencyRecorder) {
         var _this = this;
         this._priceLatencyRecorder = priceLatencyRecorder;
@@ -1007,7 +1016,7 @@ var ConnectivityStatusViewModel = (function () {
     };
     return ConnectivityStatusViewModel;
 }());
-var ShellViewModel = (function () {
+var ShellViewModel = /** @class */ (function () {
     function ShellViewModel(spotTiles, blotter, connectivityStatus, sessionExpirationService, reactiveTrader) {
         var _this = this;
         this.spotTiles = spotTiles;
@@ -1032,7 +1041,7 @@ var ShellViewModel = (function () {
     };
     return ShellViewModel;
 }());
-var AffirmationViewModel = (function () {
+var AffirmationViewModel = /** @class */ (function () {
     function AffirmationViewModel(trade, parent) {
         this._trade = trade;
         this._parent = parent;
@@ -1122,7 +1131,7 @@ var AffirmationViewModel = (function () {
     };
     return AffirmationViewModel;
 }());
-var ConfigViewModel = (function () {
+var ConfigViewModel = /** @class */ (function () {
     function ConfigViewModel() {
         this.subscriptionMode = ko.observable(SubscriptionMode.OnDispatcher);
         this.executionMode = ko.observable(ExecutionMode.Async);
@@ -1159,7 +1168,7 @@ var SubscriptionMode;
     SubscriptionMode[SubscriptionMode["Conflate"] = 2] = "Conflate";
     SubscriptionMode[SubscriptionMode["ConstantRate"] = 3] = "ConstantRate";
 })(SubscriptionMode || (SubscriptionMode = {}));
-var ErrorViewModel = (function () {
+var ErrorViewModel = /** @class */ (function () {
     function ErrorViewModel(parent, message) {
         this._parent = parent;
         this.errorMessage = ko.observable(message);
@@ -1169,7 +1178,7 @@ var ErrorViewModel = (function () {
     };
     return ErrorViewModel;
 }());
-var FormattedPrice = (function () {
+var FormattedPrice = /** @class */ (function () {
     function FormattedPrice(bigFigures, pips, tenthOfPips) {
         this.bigFigures = bigFigures;
         this.pips = pips;
@@ -1177,7 +1186,7 @@ var FormattedPrice = (function () {
     }
     return FormattedPrice;
 }());
-var OneWayPriceViewModel = (function () {
+var OneWayPriceViewModel = /** @class */ (function () {
     function OneWayPriceViewModel(parent, direction) {
         this._parent = parent;
         this.direction = direction == Direction.Buy ? "BUY" : "SELL";
@@ -1225,7 +1234,7 @@ var OneWayPriceViewModel = (function () {
     };
     return OneWayPriceViewModel;
 }());
-var PriceFormatter = (function () {
+var PriceFormatter = /** @class */ (function () {
     function PriceFormatter() {
     }
     PriceFormatter.getFormattedPrice = function (rate, precision, pipsPosition) {
@@ -1254,7 +1263,7 @@ var PriceMovement;
     PriceMovement[PriceMovement["Down"] = 1] = "Down";
     PriceMovement[PriceMovement["Up"] = 2] = "Up";
 })(PriceMovement || (PriceMovement = {}));
-var PricingViewModel = (function () {
+var PricingViewModel = /** @class */ (function () {
     function PricingViewModel(currencyPair, priceLatencyRecorder, parent) {
         this._priceLatencyRecorder = priceLatencyRecorder;
         this.symbol = currencyPair.baseCurrency + " / " + currencyPair.counterCurrency;
@@ -1336,7 +1345,7 @@ var PricingViewModel = (function () {
     };
     return PricingViewModel;
 }());
-var PricingViewModelFactory = (function () {
+var PricingViewModelFactory = /** @class */ (function () {
     function PricingViewModelFactory(priceLatencyRecorder) {
         this._priceLatencyRecorder = priceLatencyRecorder;
     }
@@ -1345,7 +1354,7 @@ var PricingViewModelFactory = (function () {
     };
     return PricingViewModelFactory;
 }());
-var SpotTilesViewModel = (function () {
+var SpotTilesViewModel = /** @class */ (function () {
     function SpotTilesViewModel(referenceDataRepository, pricingViewModelFactory) {
         this._referenceDataRepository = referenceDataRepository;
         this._pricingViewModelFactory = pricingViewModelFactory;
@@ -1395,7 +1404,7 @@ var SpotTilesViewModel = (function () {
     };
     return SpotTilesViewModel;
 }());
-var SpotTileViewModel = (function () {
+var SpotTileViewModel = /** @class */ (function () {
     function SpotTileViewModel(currencyPair, subscriptionMode, pricingFactory) {
         this.pricing = ko.observable(null);
         this.affirmation = ko.observable(null);
@@ -1450,7 +1459,7 @@ var TileState;
     TileState[TileState["Error"] = 2] = "Error";
     TileState[TileState["Config"] = 3] = "Config";
 })(TileState || (TileState = {}));
-var ReactiveTrader = (function () {
+var ReactiveTrader = /** @class */ (function () {
     function ReactiveTrader() {
     }
     ReactiveTrader.prototype.initialize = function (username, servers) {
