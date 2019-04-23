@@ -23,13 +23,51 @@ namespace ConsoleClient
     {
         public Test()
         {
-            Program.Initialize().Subscribe(
-                _ =>
+            //var s = Program.GetConections();
+
+            //Program.Initialize().Subscribe(
+            //    _ =>
+            //    {
+            //        //connected sucessfully
+            //        var a = Program.GetSpotStreamForConnection("USDJPY").Subscribe(p =>
+            //            Console.WriteLine("ask:{0} bid:{1} CreationTimestamp {2} Mid {3},SpotDate {4},ValueDate {5},Symbol {6}", p.Ask, p.Bid, p.CreationTimestamp, p.Mid, p.SpotDate, p.ValueDate, p.Symbol)
+            //           );
+            //        //TODO should return disposible
+            //        //return a;
+            //    },
+            //    ex =>
+            //    {
+
+            //    },
+            //    () => //TODO: what's difference between () =>  and _ =>
+            //    {
+            //        Console.WriteLine("connection commpleted");
+            //    });
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            conifg();
+            _connectionStream.Subscribe(
+                _ => Console.WriteLine("hi"),
+                ex => Console.WriteLine("e"),
+                () => { });
+            _connectionStream.Subscribe(
+                _ => Console.WriteLine("hi"),
+                ex => Console.WriteLine("e"),
+                () => { });
+            var t = new Test();
+
+
+            GetPriceStream("USDJPY").Subscribe(
+                p =>
                 {
                     //connected sucessfully
-                    var a = Program.GetSpotStreamForConnection("USDJPY").Subscribe(p =>
-                        Console.WriteLine("ask:{0} bid:{1} CreationTimestamp {2} Mid {3},SpotDate {4},ValueDate {5},Symbol {6}", p.Ask, p.Bid, p.CreationTimestamp, p.Mid, p.SpotDate, p.ValueDate, p.Symbol)
-                       );
+                    //var a = Program.GetSpotStreamForConnection("USDJPY").Subscribe(p =>
+                    Console.WriteLine("ask:{0} bid:{1} CreationTimestamp {2} Mid {3},SpotDate {4},ValueDate {5},Symbol {6}", p.Ask, p.Bid, p.CreationTimestamp, p.Mid, p.SpotDate, p.ValueDate, p.Symbol);
+                       //);
                     //TODO should return disposible
                     //return a;
                 },
@@ -41,15 +79,24 @@ namespace ConsoleClient
                 {
                     Console.WriteLine("connection commpleted");
                 });
-        }
-    }
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            conifg();
-            var t = new Test();
-            
+            GetPriceStream("EURUSD").Subscribe(
+                p =>
+                {
+                    //connected sucessfully
+                    //var a = Program.GetSpotStreamForConnection("USDJPY").Subscribe(p =>
+                    Console.WriteLine("ask:{0} bid:{1} CreationTimestamp {2} Mid {3},SpotDate {4},ValueDate {5},Symbol {6}", p.Ask, p.Bid, p.CreationTimestamp, p.Mid, p.SpotDate, p.ValueDate, p.Symbol);
+                    //);
+                    //TODO should return disposible
+                    //return a;
+                },
+                ex =>
+                {
+
+                },
+                () => //TODO: what's difference between () =>  and _ =>
+                {
+                    Console.WriteLine("connection commpleted");
+                });
             Console.ReadKey();
         }
         
@@ -80,6 +127,7 @@ namespace ConsoleClient
 
             
             PricingHubProxy = _hubConnection.CreateHubProxy(proxy);
+            _connectionStream = GetConections();
             //try
             //{
             //    //Console.WriteLine("Connecting to {0} via {1}", Address, TransportName);
@@ -100,6 +148,42 @@ namespace ConsoleClient
 
         }
 
+        public static IObservable<int> GetConections()
+        {
+            return Observable.Create<int>(o =>
+            {
+                Console.WriteLine("Creating new connection...");
+                //var connection = GetNextConnection();
+
+                //var statusSubscription = connection.StatusStream.Subscribe(
+                //    _ => { },
+                //    ex => o.OnCompleted(),
+                //    () =>
+                //    {
+                //        Console.WriteLine("Status subscription completed");
+                //        o.OnCompleted();
+                //    });
+
+                var connectionSubscription =
+                        Initialize().Subscribe(
+                        _ => o.OnNext(1),
+                        ex => o.OnCompleted(),
+                        o.OnCompleted);
+
+                return new CompositeDisposable { connectionSubscription };
+            })
+            //.Repeat()
+            //.Replay(1);
+            .Publish()
+            .RefCount();
+            //.LazilyConnect(_disposable);
+            //return (from connection in Initialize()
+            //        from t in GetSpotStreamForConnection(currencyPair)
+            //        select t)
+            //        //.Merge(disconnected)
+            //        .Publish()
+            //        .RefCount();
+        }
         public static IObservable<Unit> Initialize()
         {
             if (_initialized)
@@ -140,8 +224,18 @@ namespace ConsoleClient
                     }
                 });
             })
-            .Publish()
+            .Repeat()
+            .Replay()
             .RefCount();
+        }
+        public static IObservable<PriceDto> GetPriceStream(string currencyPair)
+        {
+            return (from connection in _connectionStream
+                   from tt in GetSpotStreamForConnection(currencyPair)
+                   select tt)
+                    //.Merge(disconnected)
+                    .Publish()
+                    .RefCount();
         }
         public static IObservable<PriceDto> GetSpotStreamForConnection(string currencyPair)
         {
@@ -209,5 +303,6 @@ namespace ConsoleClient
         private static HubConnection _hubConnection;
         public static IHubProxy PricingHubProxy;
         private static bool _initialized = false;
+        private static IObservable<int> _connectionStream; 
     }
 }
