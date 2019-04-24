@@ -111,7 +111,7 @@ namespace ConsoleClient
             //IObservable<PriceDto> a = pricingServiceClient.GetSpotStream("currencyPair");
             var username = "WPF-" + new Random().Next(1000);
 
-            var address = "http://localhost:8080"; //"http://111.230.221.237";//
+            var address = "http://localhost:49762";// server web "http://localhost:8080"; //server gui//"http://111.230.221.237";//
             var proxy = ServiceConstants.Server.PricingHub;// "stockTicker";// )
                                                            // ReactiveTrader Server gui singalr version is 1.2, while client version is 2.0
                                                            //"You are using a version of the client that isn't compatible with the server. Client version 2.1, server version 1.3."
