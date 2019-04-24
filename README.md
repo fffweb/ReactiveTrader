@@ -21,6 +21,9 @@ Reactive Trader was written by the team at [Adaptive](http://weareadaptive.com),
 	"Adaptive.ReactiveTrader.Client.MainWindow"
 	Adaptive.ReactiveTrader.Server
 	web  contains server and react ts client
+# ***** not worked Windows Store Client
+None of the constructors found with 'Autofac.Core.Activators.Reflection.DefaultConstructorFinder' on type 'Adaptive.ReactiveTrader.Client.Concurrency.ConstantRatePump' can be invoked with the available services and parameters:
+Cannot resolve parameter 'Adaptive.ReactiveTrader.Client.Concurrency.IConstantRateConfigurationProvider configurationProvider' of constructor 'Void .ctor(Adaptive.ReactiveTrader.Client.Concurrency.IConcurrencyService, Adaptive.ReactiveTrader.Client.Concurrency.IConstantRateConfigurationProvider)'.
 # Demos
 
 Reactive Trader comes in different flavours (click on the link for a demo)
